@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+import argparse, sys, subprocess
+
+def main():
+    args = parse_args()
+    warn = args.w
+    crit = args.c
+    spec_user = args.u
+    users = get_users()
+    count = len(users)
+    found_user = None
+    if spec_user:
+        found_user = find_user(spec_user, users)
+    return_api_code(count, warn, crit, found_user)
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-w", action="store_true", default=5, help="warn level")
+    parser.add_argument("-c", action="store_true", default=10,help="critical level")
+    parser.add_argument("-u", nargs="?", help="specify a user")
+    args = parser.parse_args()
+    return args
+
+def get_users():
+    command = ["users"]
+    users = subprocess.check_output(command)
+    users = users.split()
+    return users
+
+def find_user(spec_user, users):
+    if spec_user in users:
+        return spec_user
+
+def return_api_code(count, warn, crit, spec_user):
+    exit_msg = "OK"
+    exit_code = 0
+    if count >= crit:
+        exit_msg = "critical: %d users logged in" % count
+        exit_code = 2
+    elif count >= warn:
+        exit_msg = "warning: %d users logged in" % count
+        exit_code = 1
+    if spec_user:
+        exit_msg = str(exit_msg) + "; user \"%s\" is logged in" % spec_user
+
+    print exit_msg
+    sys.exit(exit_code)
+
+if __name__ == '__main__':
+    main()
