@@ -10,7 +10,7 @@ make
 make install DESTDIR=/tmp/installdir
 
 fpm -s dir -t deb -n lldpd \
-  -v 2.7.11-2 \
+  -v 0.7.11-2 \
   --iteration 8u2 \
   -C /tmp/installdir \
   -p /output \
