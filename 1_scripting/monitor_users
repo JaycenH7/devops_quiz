@@ -16,8 +16,8 @@ def main():
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-w", action="store_true", default=5, help="warn level")
-    parser.add_argument("-c", action="store_true", default=10,help="critical level")
+    parser.add_argument("-w", nargs="?", type=int, default=5, help="warn level")
+    parser.add_argument("-c", nargs="?", type=int, default=10,help="critical level")
     parser.add_argument("-u", nargs="?", help="specify a user")
     args = parser.parse_args()
     return args
